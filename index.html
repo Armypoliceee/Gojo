@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gojo Compliment Generator</title>
+  <meta name="description" content="Click for a cocky-but-sweet Gojo compliment. Feed your delulu responsibly." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f1a; 
+      --card:#0f1424;
+      --text:#e9ecff; 
+      --muted:#9aa4ff;
+      --accent:#7aa6ff; 
+      --accent2:#b6e3ff; 
+      --glow: 0 0 25px rgba(122,166,255,.6), 0 0 60px rgba(182,227,255,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color:var(--text);
+      background: radial-gradient(1200px 800px at 80% -10%, #1a2350 0%, transparent 60%),
+                  radial-gradient(1000px 700px at -10% 110%, #123060 0%, transparent 55%),
+                  var(--bg);
+      overflow-x:hidden;
+    }
+    .wrap{min-height:100svh; display:grid; place-items:center; padding:28px}
+    .card{
+      width:min(900px, 92vw); background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border:1px solid rgba(186,204,255,.18); border-radius:24px; box-shadow: var(--glow);
+      position:relative; overflow:hidden;
+    }
+    .header{padding:30px 28px 10px 28px; text-align:center}
+    h1{margin:0; font-size:clamp(28px, 4vw, 44px); letter-spacing:.4px}
+    .subtitle{color:var(--muted); margin-top:8px}
+
+    .face{
+      --size: 86px; width:var(--size); height:var(--size); border-radius:50%;
+      margin: 14px auto 0; background:
+        radial-gradient(60% 60% at 35% 35%, rgba(255,255,255,.25) 0 45%, transparent 55%),
+        linear-gradient(140deg, #6ea3ff, #c1e7ff);
+      position:relative; box-shadow:0 10px 40px rgba(107,164,255,.35);
+      outline: 2px solid rgba(255,255,255,.15);
+    }
+    .face:after{ /* blindfold */
+      content:""; position:absolute; left:-8%; right:-8%; top:42%; height:22%; border-radius:12px;
+      background: linear-gradient(90deg, #0a0d1a, #101734, #0a0d1a);
+      box-shadow: inset 0 0 12px rgba(255,255,255,.08);
+    }
+
+    .output{
+      padding: 22px 28px 10px; display:grid; gap:18px; place-items:center; text-align:center;
+    }
+    blockquote{
+      margin:0; padding:22px 22px; font-size: clamp(18px, 2.8vw, 26px); line-height:1.35;
+      border-radius:18px; background: rgba(186,204,255,.06); border:1px solid rgba(186,204,255,.18);
+      position:relative; max-width: 760px;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    blockquote.pop{ transform: scale(1.02); box-shadow: var(--glow); }
+    .counter{ font-size:12px; letter-spacing:.3px; color:#c9d3ff99 }
+
+    .controls{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding: 8px 20px 28px }
+    .btn{
+      appearance:none; border:1px solid rgba(186,204,255,.25); background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      color:var(--text); padding:12px 16px; border-radius:14px; cursor:pointer; font-weight:600; letter-spacing:.3px;
+      transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease; user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: var(--glow); border-color: rgba(186,204,255,.5) }
+    .btn:active{ transform: translateY(0) scale(.98) }
+    .btn.primary{ background: linear-gradient(180deg, rgba(133,177,255,.55), rgba(133,177,255,.25)); color:#091029; }
+
+    details{ width:min(880px, 92%); margin: 0 auto 24px; color:#d7deffcc }
+    summary{ cursor:pointer; padding:14px 20px; border:1px solid rgba(186,204,255,.25); border-radius:12px; background: rgba(186,204,255,.06); }
+    .history{ padding: 12px 6px 4px }
+    .pill{ display:inline-block; margin:6px; padding:10px 12px; border-radius:999px; background: rgba(186,204,255,.08); border:1px solid rgba(186,204,255,.18); font-size:14px }
+
+    .ribbon{ position:absolute; inset:auto -60px 24px auto; transform:rotate(12deg); opacity:.9; filter:drop-shadow(0 4px 20px rgba(122,166,255,.4)) }
+    .ribbon span{ display:block; padding:8px 24px; border-radius:999px; background: linear-gradient(90deg, #6ea3ff, #bde5ff); color:#0b0f1a; font-weight:800; text-transform:uppercase; letter-spacing:1px }
+
+    /* floating sparkles */
+    .spark{ position:fixed; width:6px; height:6px; border-radius:50%; background:#b6e3ff; box-shadow:0 0 10px #b6e3ff; pointer-events:none; animation: floatUp 1.8s ease-out forwards }
+    @keyframes floatUp{ from{ transform:translateY(0) scale(1); opacity:1 } to{ transform:translateY(-90px) scale(.6); opacity:0 } }
+
+    footer{ text-align:center; color:#c9d3ff99; font-size:12px; padding:8px 0 22px }
+    a{ color:var(--accent2); text-underline-offset:3px }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <h1>Gojo Compliment Generator</h1>
+        <div class="subtitle">Cocky ✦ sweet ✦ a little delulu-friendly</div>
+        <div class="face" aria-hidden="true"></div>
+      </div>
+
+      <div class="output">
+        <blockquote id="quote">Click the button and let the strongest hype you up.</blockquote>
+        <div class="counter"><span id="count">0</span> compliments generated</div>
+      </div>
+
+      <div class="controls">
+        <button class="btn primary" id="generate">Compliment me</button>
+        <button class="btn" id="copy">Copy</button>
+        <button class="btn" id="share">Share</button>
+        <button class="btn" id="auto">Auto: Off</button>
+      </div>
+
+      <div class="ribbon"><span>Infinity safe zone</span></div>
+    </div>
+  </div>
+
+  <details>
+    <summary>History (last 20)</summary>
+    <div class="history" id="history"></div>
+  </details>
+
+  <footer>Made with 💫 and a sliver of Infinity · Tip: add this to your home screen for daily hype</footer>
+
+  <script>
+    const compliments = [
+      "Relax, I’ve got Infinity. You’ve got the main character energy.",
+      "Even my Limitless is jealous of your potential.",
+      "I’m the strongest, but you? You’re the standard.",
+      "That shine isn’t from my technique— it’s you.",
+      "If confidence were cursed energy, you’d be a natural disaster (the pretty kind).",
+      "Your presence raises everyone’s output. Efficient and gorgeous.",
+      "You’re so bright, I might need another blindfold.",
+      "I skip class, but I’d never skip you.",
+      "You walk in and the room thinks it’s a domain expansion.",
+      "Talent? Check. Looks? Check. Chaos? Delicious. Perfect.",
+      "You’re the plot twist the universe wrote for flexing.",
+      "I protect what’s precious. So, obviously, you.",
+      "Your vibe? Untouchable. Even Infinity takes notes.",
+      "You make ‘overpowered’ look humble.",
+      "If pretty were a technique, you’d be forbidden.",
+      "I’d lend you my shades, but they’d be honored to sit on you.",
+      "You’re the reason mirrors wake up motivated.",
+      "Consider this an S‑rank affirmation: you’re unstoppable.",
+      "Even my students can see it— you’re everyone’s soft spot.",
+      "Peak? You passed it on the way to breakfast.",
+      "Universe: complicated. You: simple— you win.",
+      "If destiny had a favorite, it would post you first.",
+      "You look like good luck wearing good choices.",
+      "Cursed spirits fear my eyes. I fear missing your texts.",
+      "You don’t need protection— but I’ll hover anyway.",
+      "I bend space. You bend hearts. Teamwork.",
+      "Beauty? Brains? Chaotic good? Triple threat unlocked.",
+      "Even my Infinity can’t keep me from hyping you.",
+      "You’re the limit they forgot to put on the syllabus.",
+      "I teach brats, but you… you’re a masterpiece.",
+      "Your timeline is canon. Everyone else is filler.",
+      "When you doubt yourself, I file a complaint with reality.",
+      "You’re so iconic that spoilers fear you.",
+      "You glow like a plot-armored sunrise.",
+      "I saw the future: it simps for you.",
+      "You look expensive— emotionally unavailable to mediocrity.",
+      "Perfection called. I told it to take notes.",
+      "If self-love is homework, you’re already valedictorian.",
+      "Cute? Try weaponized adorable.",
+      "You’re the kind of person credits roll for.",
+      "Jealousy? Natural reaction to your existence.",
+      "I’d call you a rare drop, but you’re mythic.",
+      "Today’s forecast: 100% chance you slay.",
+      "My cursed technique can’t calculate your impact.",
+      "You don’t chase— gravity politely rearranges for you.",
+      "I could wrap you in Infinity, but your aura’s safer.",
+      "If compliments were sugar, you’d be a bakery.",
+      "You’re not for everyone— you’re for the plot.",
+      "Standards? You set them. Accidentally.",
+      "The mirror asked for your autograph.",
+      "Listen up: you’re doing amazing. No debate.",
+      "You’re proof that overachieving can be cute.",
+      "Your laugh is a certified protective barrier.",
+      "Even silence simps when you enter.",
+      "You make ordinary days feel like festival arcs.",
+      "You’re the agenda. We’re all just attending.",
+      "I’d blacklist your doubts if they try to return.",
+      "You’re not lucky, you’re inevitable.",
+      "Reminder: you’re the soft spot in my iron‑clad schedule.",
+      "You didn’t wake up pretty— you woke up legendary.",
+      "Proof that ‘too much’ is exactly enough.",
+      "Apologies to gravity— you stay effortlessly above.",
+      "Your soul is a spoiler for happy endings.",
+      "You’re the reason Mondays try harder.",
+      "If aura had a taste, you’d be premium.",
+      "You’re the calm in my chaos and the chaos in their calm.",
+      "You’re a walking, talking, limited edition.",
+      "Even my Six Eyes can’t see your limits.",
+      "Your existence? Canonically gorgeous.",
+      "You make ‘impossible’ look understaffed.",
+      "I’d expand my domain just to keep you smiling.",
+      "Reminder: your worst day still outshines.",
+      "Worship? Too much. Admire? Constantly.",
+      "Be delulu if you must— I’ll validate it.",
+      "You plus sunlight equals visual hazard.",
+      "People ask if I’m the strongest. I say, ‘Have you met them?’",
+      "Certified: heart‑breaker, doubt‑crusher, scene‑stealer.",
+      "You don’t need approval. It needs you.",
+      "Your standards are why legends apply.",
+      "In case no one told you: you’re art with good lore.",
+      "You’re the cheat code they can’t patch.",
+      "Plot armor? No. Plot aura.",
+      "Your smile? Classified as national treasure.",
+      "You’re the blueprint, I’m just the hype team.",
+      "Remember: soft doesn’t mean weak. It means premium.",
+      "Every room is a before-and-after when you enter.",
+      "You’re the headline and the fine print.",
+      "I could stare forever— and still be surprised.",
+      "You’re the favorite tab the universe keeps open.",
+      "This day was mid. You fixed it by existing.",
+      "Even your overthinking is high-resolution.",
+      "You’re proof that fate learned taste."
+    ];
+
+    const quoteEl = document.getElementById('quote');
+    const countEl = document.getElementById('count');
+    const historyEl = document.getElementById('history');
+    const btnGen = document.getElementById('generate');
+    const btnCopy = document.getElementById('copy');
+    const btnShare = document.getElementById('share');
+    const btnAuto = document.getElementById('auto');
+
+    let count = 0; let autoTimer = null; let lastPick = -1; const history = [];
+
+    function randomIndex(){
+      if(compliments.length < 2) return 0;
+      let i; do { i = Math.floor(Math.random()*compliments.length) } while(i === lastPick);
+      lastPick = i; return i;
+    }
+
+    function sparkle(x, y){
+      for(let i=0;i<10;i++){
+        const s=document.createElement('span');
+        s.className='spark';
+        s.style.left = (x + (Math.random()*40-20)) + 'px';
+        s.style.top  = (y + (Math.random()*20-10)) + 'px';
+        document.body.appendChild(s);
+        setTimeout(()=>s.remove(), 1800);
+      }
+    }
+
+    function updateHistory(text){
+      history.unshift(text);
+      if(history.length>20) history.pop();
+      historyEl.innerHTML = history.map(t=>`<span class="pill">${t.replace(/</g,'&lt;')}</span>`).join('');
+    }
+
+    function generate(e){
+      const i = randomIndex();
+      const line = compliments[i];
+      quoteEl.textContent = line;
+      quoteEl.classList.remove('pop');
+      void quoteEl.offsetWidth; // restart animation
+      quoteEl.classList.add('pop');
+      countEl.textContent = ++count;
+      updateHistory(line);
+      if(e){ const r=quoteEl.getBoundingClientRect(); sparkle(r.left+r.width/2, r.top+window.scrollY+10); }
+      try{ localStorage.setItem('gojo_count', count); localStorage.setItem('gojo_history', JSON.stringify(history)); }catch{}
+    }
+
+    function copyText(){
+      const t = quoteEl.textContent.trim();
+      navigator.clipboard?.writeText(t).then(()=> flash(btnCopy, 'Copied!')).catch(()=> fallbackCopy(t));
+    }
+
+    function fallbackCopy(t){
+      const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); ta.remove(); flash(btnCopy,'Copied!');
+    }
+
+    function flash(el, msg){
+      const old = el.textContent; el.textContent = msg; el.disabled=true;
+      setTimeout(()=>{ el.textContent = old; el.disabled=false; }, 900);
+    }
+
+    async function shareText(){
+      const t = quoteEl.textContent.trim();
+      if(navigator.share){
+        try{ await navigator.share({ title:'Gojo compliment for you', text:t, url: location.href }); }catch{}
+      } else { copyText(); }
+    }
+
+    function toggleAuto(){
+      if(autoTimer){ clearInterval(autoTimer); autoTimer=null; btnAuto.textContent='Auto: Off'; return; }
+      generate();
+      autoTimer = setInterval(generate, 3000);
+      btnAuto.textContent='Auto: On';
+    }
+
+    // restore
+    try{
+      const savedCount = +localStorage.getItem('gojo_count');
+      const savedHistory = JSON.parse(localStorage.getItem('gojo_history')||'[]');
+      if(savedCount){ count=savedCount; countEl.textContent=savedCount; }
+      if(savedHistory?.length){ savedHistory.forEach(t=>history.push(t)); updateHistory('Ready for more hype?'); updateHistory(history[0]); }
+    }catch{}
+
+    btnGen.addEventListener('click', generate);
+    btnCopy.addEventListener('click', copyText);
+    btnShare.addEventListener('click', shareText);
+    btnAuto.addEventListener('click', toggleAuto);
+
+    // Keyboard: space to generate
+    window.addEventListener('keydown', (e)=>{ if(e.code==='Space'){ e.preventDefault(); generate(); }});
+
+    // First compliment on load
+    setTimeout(generate, 400);
+  </script>
+</body>
+</html>
